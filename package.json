@@ -1,0 +1,27 @@
+{
+  "name": "dispenserapp",
+  "version": "1.0.0",
+  "description": "internship project: physical dispenser of materials for engineering students, with an app to acess and control it.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lexa24lexa/dispenserApp.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/lexa24lexa/dispenserApp/issues"
+  },
+  "homepage": "https://github.com/lexa24lexa/dispenserApp#readme",
+  "dependencies": {
+    "concurrently": "^9.2.1"
+  },
+  "devDependencies": {
+    "cross-env": "^10.1.0"
+  }
+}
