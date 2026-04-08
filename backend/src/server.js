@@ -25,6 +25,15 @@ app.get("/api/users", (req, res) => {
   });
 });
 
+app.get("/api/drawers", (req, res) => {
+  db.query("SELECT * FROM drawers", (err, results) => {
+    if (err) {
+      return res.status(500).json(err);
+    }
+    res.json(results);
+  });
+});
+
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
