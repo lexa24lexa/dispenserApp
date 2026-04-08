@@ -30,3 +30,6 @@ CREATE TABLE logs (
     FOREIGN KEY (user_id) REFERENCES users(id),
     FOREIGN KEY (drawer_id) REFERENCES drawers(id)
 );
+
+-- add password to users
+ALTER TABLE users ADD COLUMN password VARCHAR(255);
