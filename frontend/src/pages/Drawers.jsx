@@ -24,16 +24,18 @@ const Drawers = () => {
     fetchDrawers();
   }, []);
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) return <p>loading...</p>;
 
   if (error) {
     return (
-      <p>
-        {error.status === 401 && <p>please log in</p>}
-        {error.status === 403 && <p>no permission</p>}
-        {error.status === 404 && <p>not found</p>}
-        {!error.status && <p>{error.message}</p>}
-      </p>
+      <div>
+        <p>
+          {error.status === 401 && "please login"}
+          {error.status === 403 && "no permission"}
+          {error.status === 404 && "not found"}
+          {!error.status && error.message}
+        </p>
+      </div>
     );
   }
 
@@ -48,56 +50,54 @@ const Drawers = () => {
             border: "1px solid #ccc",
             borderRadius: "12px",
             padding: "15px",
-            marginBottom: "20px",
-            boxShadow: "0 2px 8px rgba(0,0,0,0.1)"
+            marginBottom: "20px"
           }}
         >
           <h3>
             {drawer.label} {drawer.is_locked ? "🔒" : "🔓"}
           </h3>
 
-          <p><strong>weight:</strong> {drawer.current_weight}</p>
+          {user?.role === "teacher" && (
+            <p>
+              <strong>calculated weight:</strong>{" "}
+              {drawer.calculated_weight}
+            </p>
+          )}
 
           <div style={{ marginTop: "10px" }}>
-            {drawer.materials.length === 0 ? (
-              <p>no materials</p>
-            ) : (
-              drawer.materials
-                .filter((m) => {
-                  if (user?.role === "student") {
-                    return m.quantity > 0;
-                  }
-                  return true;
-                })
-                .map((m, index) => (
-                  <div
-                    key={index}
-                    style={{
-                      padding: "10px",
-                      marginBottom: "8px",
-                      borderRadius: "8px",
-                      backgroundColor:
-                        m.quantity === 0 && user?.role === "teacher"
-                          ? "#ffe5e5"
-                          : "#f5f5f5"
-                    }}
-                  >
-                    <strong>{m.material_name}</strong>
+            {drawer.materials
+              .filter((m) => {
+                if (user?.role === "student") {
+                  return m.quantity > 0;
+                }
+                return true;
+              })
+              .map((m) => (
+                <div
+                  key={m.material_id}
+                  style={{
+                    padding: "10px",
+                    marginBottom: "8px",
+                    borderRadius: "8px",
+                    backgroundColor:
+                      m.quantity === 0 && user?.role === "teacher"
+                        ? "#ffcccc"
+                        : "#f5f5f5"
+                  }}
+                >
+                  <strong>{m.name}</strong>
 
-                    <p
-                      style={{
-                        color:
-                          m.quantity === 0 && user?.role === "teacher"
-                            ? "red"
-                            : "black",
-                        margin: 0
-                      }}
-                    >
-                      quantity: {m.quantity}
+                  <p style={{ margin: 0 }}>
+                    quantity: {m.quantity}
+                  </p>
+
+                  {user?.role === "teacher" && (
+                    <p style={{ margin: 0 }}>
+                      weight: {m.total_weight}
                     </p>
-                  </div>
-                ))
-            )}
+                  )}
+                </div>
+              ))}
           </div>
         </div>
       ))}

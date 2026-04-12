@@ -70,14 +70,14 @@ app.get("/api/drawers", authMiddleware, async (req, res) => {
         m.name AS material_name,
         m.unit_weight,
 
-        dm.quantity
+        dm.quantity,
+        (dm.quantity * m.unit_weight) AS material_total_weight
 
       FROM drawers d
       LEFT JOIN drawer_materials dm ON dm.drawer_id = d.id
       LEFT JOIN materials m ON m.id = dm.material_id
     `);
 
-    // GROUP DATA (IMPORTANT FIX)
     const grouped = {};
 
     rows.forEach(row => {
@@ -87,6 +87,7 @@ app.get("/api/drawers", authMiddleware, async (req, res) => {
           label: row.label,
           is_locked: row.is_locked,
           current_weight: row.current_weight,
+          calculated_weight: 0,
           materials: []
         };
       }
@@ -94,10 +95,13 @@ app.get("/api/drawers", authMiddleware, async (req, res) => {
       if (row.material_id) {
         grouped[row.drawer_id].materials.push({
           material_id: row.material_id,
-          material_name: row.material_name,
+          name: row.material_name,
           unit_weight: row.unit_weight,
-          quantity: row.quantity
+          quantity: row.quantity,
+          total_weight: row.material_total_weight
         });
+
+        grouped[row.drawer_id].calculated_weight += row.material_total_weight;
       }
     });
 

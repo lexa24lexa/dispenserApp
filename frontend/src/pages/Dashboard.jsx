@@ -28,7 +28,7 @@ const Dashboard = () => {
     return (
       <div>
         <h2>Dashboard</h2>
-        {error.status === 401 && <p>please log in</p>}
+        {error.status === 401 && <p>please login</p>}
         {error.status === 403 && <p>no permission</p>}
         {error.status === 404 && <p>not found</p>}
         {!error.status && <p>{error.message}</p>}
