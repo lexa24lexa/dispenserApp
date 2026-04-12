@@ -6,7 +6,7 @@ import Login from "./pages/Login";
 import TeacherDashboard from "./pages/Dashboard";
 import StudentDashboard from "./pages/StudentDashboard";
 
-// import Drawers from "./pages/Drawers";
+import Drawers from "./pages/Drawers";
 // import Users from "./pages/Users";
 // import Replenishment from "./pages/Replenishment";
 // import Request from "./pages/Request";
@@ -60,7 +60,7 @@ function App() {
             />
             */}
 
-            {/* shared 
+            {/* shared */}
             <Route
               path="/drawers"
               element={
@@ -69,7 +69,6 @@ function App() {
                 </ProtectedRoute>
               }
             />
-            */}
 
             {/* student */}
             <Route
