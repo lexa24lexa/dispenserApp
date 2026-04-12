@@ -7,4 +7,14 @@ INSERT INTO users (name, card_uid, role, password) VALUES
 
 -- insert drawers
 INSERT INTO drawers (label, is_locked, current_weight) VALUES
-('Screws', TRUE, 0);
+('Screws Drawer', TRUE, 0);
+
+-- insert materials
+INSERT INTO materials (name, unit_weight) VALUES
+('Screw A', 0.5),
+('Screw B', 0.9);
+
+-- insert relation drawers - materials
+INSERT INTO drawer_materials (drawer_id, material_id, quantity) VALUES
+(1, 1, 100),
+(1, 2, 50);

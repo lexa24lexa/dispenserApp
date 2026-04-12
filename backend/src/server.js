@@ -12,10 +12,6 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-const jwt = require("jsonwebtoken");
-const bcrypt = require("bcryptjs");
-const JWT_SECRET = process.env.JWT_SECRET;
-
 // db connection test
 (async () => {
   try {
@@ -63,9 +59,52 @@ app.get("/api/logs", authMiddleware, roleMiddleware(["teacher"]), async (req, re
 // list of drawers - read-only
 app.get("/api/drawers", authMiddleware, async (req, res) => {
   try {
-    const [rows] = await db.execute("SELECT * FROM drawers");
-    res.json(rows);
+    const [rows] = await db.execute(`
+      SELECT 
+        d.id AS drawer_id,
+        d.label,
+        d.is_locked,
+        d.current_weight,
+
+        m.id AS material_id,
+        m.name AS material_name,
+        m.unit_weight,
+
+        dm.quantity
+
+      FROM drawers d
+      LEFT JOIN drawer_materials dm ON dm.drawer_id = d.id
+      LEFT JOIN materials m ON m.id = dm.material_id
+    `);
+
+    // GROUP DATA (IMPORTANT FIX)
+    const grouped = {};
+
+    rows.forEach(row => {
+      if (!grouped[row.drawer_id]) {
+        grouped[row.drawer_id] = {
+          drawer_id: row.drawer_id,
+          label: row.label,
+          is_locked: row.is_locked,
+          current_weight: row.current_weight,
+          materials: []
+        };
+      }
+
+      if (row.material_id) {
+        grouped[row.drawer_id].materials.push({
+          material_id: row.material_id,
+          material_name: row.material_name,
+          unit_weight: row.unit_weight,
+          quantity: row.quantity
+        });
+      }
+    });
+
+    res.json(Object.values(grouped));
+
   } catch (err) {
+    console.error(err);
     res.status(500).json(err);
   }
 });
