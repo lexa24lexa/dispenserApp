@@ -4,6 +4,8 @@ require("dotenv").config();
 const db = require("./config/db");
 
 const authRoutes = require("./routes/authRoutes");
+const authMiddleware = require("./middleware/authMiddleware");
+const roleMiddleware = require("./middleware/roleMiddleware");
 
 const app = express();
 
@@ -37,8 +39,8 @@ app.get("/api/test", (req, res) => {
   res.json({ message: "backend connected" });
 });
 
-// list of users
-app.get("/api/users", async (req, res) => {
+// list of users - teachers only
+app.get("/api/users", authMiddleware, roleMiddleware(["teacher"]), async (req, res) => {
   try {
     const [rows] = await db.execute("SELECT * FROM users");
     res.json(rows);
@@ -48,8 +50,18 @@ app.get("/api/users", async (req, res) => {
   }
 });
 
-// list of draweres
-app.get("/api/drawers", async (req, res) => {
+// list of logs - teachers only
+app.get("/api/logs", authMiddleware, roleMiddleware(["teacher"]), async (req, res) => {
+  try {
+    const [rows] = await db.execute("SELECT * FROM logs");
+    res.json(rows);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+// list of drawers - read-only
+app.get("/api/drawers", authMiddleware, async (req, res) => {
   try {
     const [rows] = await db.execute("SELECT * FROM drawers");
     res.json(rows);
@@ -59,7 +71,7 @@ app.get("/api/drawers", async (req, res) => {
 });
 
 // post a scan with log movement
-app.post("/api/scan", async (req, res) => {
+app.post("/api/scan", authMiddleware, async (req, res) => {
   const { card_uid } = req.body;
 
   try {
@@ -88,16 +100,6 @@ app.post("/api/scan", async (req, res) => {
 
   } catch (err) {
     console.error(err);
-    res.status(500).json(err);
-  }
-});
-
-// list of logs
-app.get("/api/logs", async (req, res) => {
-  try {
-    const [rows] = await db.execute("SELECT * FROM logs");
-    res.json(rows);
-  } catch (err) {
     res.status(500).json(err);
   }
 });
