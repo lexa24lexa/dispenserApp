@@ -1,3 +1,4 @@
+DROP DATABASE dispenser_db;
 CREATE DATABASE IF NOT EXISTS dispenser_db;
 USE dispenser_db;
 
@@ -31,6 +32,8 @@ CREATE TABLE drawer_materials (
     drawer_id INT,
     material_id INT,
     quantity INT DEFAULT 0,
+
+    UNIQUE (drawer_id, material_id),
 
     FOREIGN KEY (drawer_id) REFERENCES drawers(id),
     FOREIGN KEY (material_id) REFERENCES materials(id)
