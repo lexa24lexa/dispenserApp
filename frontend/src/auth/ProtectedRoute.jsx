@@ -4,12 +4,10 @@ import { useAuth } from "./useAuth";
 const ProtectedRoute = ({ children, roles }) => {
   const { user } = useAuth();
 
-  if (!user) {
-    return <Navigate to="/login" />;
-  }
+  if (!user) return <Navigate to="/login" />;
 
   if (roles && !roles.includes(user.role)) {
-    return <Navigate to={user.role === "teacher" ? "/" : "/student"} />;
+    return <Navigate to="/" />;
   }
 
   return children;
