@@ -1,8 +1,16 @@
 import { Link } from "react-router-dom";
 import { useAuth } from "../auth/useAuth";
+import { useNavigate } from "react-router-dom";
 
 const Navbar = () => {
   const { user, logout } = useAuth();
+
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate("/");
+  };
 
   return (
     <nav style={{ display: "flex", gap: "12px", padding: "10px", borderBottom: "1px solid #ccc" }}>
@@ -38,7 +46,7 @@ const Navbar = () => {
             <span>
               {user.name} ({user.role})
             </span>
-            <button onClick={logout}>Logout</button>
+            <button onClick={handleLogout}>Logout</button>
           </>
         )}
 
