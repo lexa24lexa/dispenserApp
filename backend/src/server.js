@@ -42,7 +42,7 @@ app.get("/api/test", (req, res) => {
 // list of users - teachers only
 app.get("/api/users", authMiddleware, roleMiddleware(["teacher"]), async (req, res) => {
   try {
-    const [rows] = await db.execute("SELECT * FROM users");
+    const [rows] = await db.execute("SELECT id, name, role, card_uid FROM users");
     res.json(rows);
   } catch (err) {
     console.error(err);
@@ -76,7 +76,7 @@ app.post("/api/scan", authMiddleware, async (req, res) => {
 
   try {
     const [users] = await db.execute(
-      "SELECT * FROM users WHERE card_uid = ?",
+      "SELECT id, name, role, card_uid FROM users WHERE card_uid = ?",
       [card_uid]
     );
 

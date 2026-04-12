@@ -14,7 +14,7 @@ router.post("/login", async (req, res) => {
 
   try {
     const [rows] = await db.execute(
-      "SELECT * FROM users WHERE name = ?",
+      "SELECT id, name, role, card_uid FROM users WHERE name = ?",
       [name]
     );
 
