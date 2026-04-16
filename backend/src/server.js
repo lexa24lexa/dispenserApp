@@ -86,7 +86,7 @@ app.get("/api/drawers", authMiddleware, async (req, res) => {
           drawer_id: row.drawer_id,
           label: row.label,
           is_locked: row.is_locked,
-          current_weight: row.current_weight,
+          current_weight: Number(row.current_weight),
           calculated_weight: 0,
           materials: []
         };
@@ -96,13 +96,12 @@ app.get("/api/drawers", authMiddleware, async (req, res) => {
         grouped[row.drawer_id].materials.push({
           material_id: row.material_id,
           name: row.material_name,
-          unit_weight: row.unit_weight,
+          unit_weight: Number(row.unit_weight),
           quantity: row.quantity,
-          total_weight: row.material_total_weight
+          total_weight: Number(row.material_total_weight)
         });
 
-        grouped[row.drawer_id].calculated_weight += row.material_total_weight;
-      }
+        grouped[row.drawer_id].calculated_weight += Number(row.material_total_weight);      }
     });
 
     res.json(Object.values(grouped));
