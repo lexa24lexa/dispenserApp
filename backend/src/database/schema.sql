@@ -43,6 +43,7 @@ CREATE TABLE drawer_materials (
 CREATE TABLE logs (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT,
+    user_role ENUM('student', 'teacher') NOT NULL,
     drawer_id INT,
     action ENUM('unlock', 'weight_update') NOT NULL,
     weight_before FLOAT,

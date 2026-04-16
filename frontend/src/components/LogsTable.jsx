@@ -7,6 +7,7 @@ const LogsTable = ({ logs }) => {
         <tr>
           <th>id</th>
           <th>user id</th>
+          <th>role</th>
           <th>drawer id</th>
           <th>action</th>
           <th>weight before</th>
@@ -19,6 +20,7 @@ const LogsTable = ({ logs }) => {
           <tr key={log.id}>
             <td>{log.id}</td>
             <td>{log.user_id}</td>
+            <td>{log.user_role}</td>
             <td>{log.drawer_id}</td>
             <td>{log.action}</td>
             <td>{log.weight_before}</td>
